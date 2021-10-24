@@ -7,14 +7,14 @@
      Join Room:<br> 
      <input type="text" name="name" id="roomName">
     <br>
-     Enter Id: <br>
-     <input type="text" id="identity" > <br>
-     Enter Password: <br>
-     <input type="text" id="pass">
-     <button onclick="checkPass()">Submit</button>
-     <br>
-     <div id="roomInfo"></div>
-     
+    <button onclick="joinRoom()">Submit</button>
+      <div id="roomInfo"></div>
+      <div id="btn" style="display:none">
+        <button id="option1" onclick="vote1()">OPTION 1</button> <p id="vote1Value">0</p><br>
+        <button id="option2"onclick="vote2()">OPTION 2</button><p id="vote2Value">0</p><br>
+        <button id="option3" onclick="vote1()">OPTION 3</button><p id="vote3Value">0</p><br>
+        <button id="option4" onclick="vote1()">OPTION 4</button><p id="vote4Value">0</p><br>
+      </div>
      </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="./script.js"></script>
