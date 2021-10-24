@@ -14,19 +14,19 @@ io.on('connection', function (socket) {
     })
     socket.on('vote1', function (roomForVote) {
         vote[0] = vote[0] + 1
-        socket.to(roomForVote).emit('vote1done',vote[0])
+        socket.emit('vote1done',vote[0])
     })
     socket.on('vote2', function () {
         vote[1] = vote[1] + 1
-        socket.to(roomForVote).emit('vote2done',vote[1])
+        socket.emit('vote2done',vote[1])
     })
     socket.on('vote3', function () {
         vote[2] = vote[2] + 1
-        socket.to(roomForVote).emit('vote3done',vote[2])
+        socket.emit('vote3done',vote[2])
     })
     socket.on('vote4', function () {
         vote[3] = vote[3] + 1
-        socket.to(roomForVote).emit('vote4done',vote[3])
+        socket.emit('vote4done',vote[3])
     })
    }) 
 

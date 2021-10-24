@@ -4,11 +4,12 @@ var socket = io();
 // const password=document.getElementById('pass')
 const showButtons = document.getElementById("btn");
 const roomInfo = document.getElementById("roomInfo");
-const roomName = document.getElementById("roomName").value;
 socket.on(" connect", () => {
   console.log("Connected", socket.id);
 });
 function joinRoom() {
+
+const roomName = document.getElementById("roomName").value;
   socket.emit("roomTojoin", roomName);
 }
 socket.on("roomJoined", function (roName) {
