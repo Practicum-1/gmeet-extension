@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+     Join Room:<br> 
+     <input type="text" name="name" id="roomName">
+    <br>
+     Enter Id: <br>
+     <input type="text" id="identity" > <br>
+     Enter Password: <br>
+     <input type="text" id="pass">
+     <button onclick="checkPass()">Submit</button>
+     <br>
+     <div id="roomInfo"></div>
+     
+     </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script.js"></script>
+</html>
