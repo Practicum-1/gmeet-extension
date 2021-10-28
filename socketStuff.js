@@ -2,34 +2,34 @@ const express = require('express');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-let rooms={}
 app.use(express.static('client'))
-let vote=[0,0,0,0]
-
+let vote = 0;
+let rooms=[]
 io.on('connection', function (socket) {
-    socket.on('roomTojoin', function (rName) {
-       console.log(rName);
+console.log("Your id is "+ socket.id);
+    socket.on('joinRoom', function (roomName,msg) {
+        socket.join(roomName)
+        console.log(msg);
+        io.to(roomName).emit('showMessage',msg)
+    })
+    socket.on('countOne', function (rName) {
+        const roomAlready = rooms.includes(rName);
         socket.join(rName)
-        socket.emit('roomJoined',rName)
+        if (roomAlready == true) {
+            vote = vote + 1;
+        }
+        else
+        {
+            rooms.push(rName)
+            vote = 0
+            vote=vote+1
+            }
+        console.log(rooms);
+        // vote = vote + 1;
+        io.to(rName).emit('voteOneCounted',vote)
     })
-    socket.on('vote1', function (roomForVote) {
-        vote[0] = vote[0] + 1
-        socket.emit('vote1done',vote[0])
-    })
-    socket.on('vote2', function () {
-        vote[1] = vote[1] + 1
-        socket.emit('vote2done',vote[1])
-    })
-    socket.on('vote3', function () {
-        vote[2] = vote[2] + 1
-        socket.emit('vote3done',vote[2])
-    })
-    socket.on('vote4', function () {
-        vote[3] = vote[3] + 1
-        socket.emit('vote4done',vote[3])
-    })
-   }) 
+})
 
 http.listen(3000, function(){
-   console.log('listening on localhost:3000');
-});
+    console.log('listening on localhost:3000');
+ });
