@@ -4,7 +4,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 app.use(express.static('client'))
 let vote = 0;
-let rooms=[]
+let voterDetail=[]
+let rooms = []
+
+
+
 io.on('connection', function (socket) {
 console.log("Your id is "+ socket.id);
     socket.on('joinRoom', function (roomName,msg) {
@@ -12,21 +16,18 @@ console.log("Your id is "+ socket.id);
         console.log(msg);
         io.to(roomName).emit('showMessage',msg)
     })
+    
+    
     socket.on('countOne', function (rName) {
-        const roomAlready = rooms.includes(rName);
         socket.join(rName)
-        if (roomAlready == true) {
-            vote = vote + 1;
-        }
-        else
-        {
-            rooms.push(rName)
-            vote = 0
-            vote=vote+1
-            }
-        console.log(rooms);
-        // vote = vote + 1;
-        io.to(rName).emit('voteOneCounted',vote)
+        var voter = { room: rName, vote: 0 }
+        voterDetail.push(voter)
+        console.log(voterDetail);
+        let obj = voterDetail.find(o => o.room === rName);
+console.log(obj.room);
+        obj.vote = obj.vote + 1
+        console.log(` ${obj.room} has ${obj.vote} votes`);
+        io.to(rName).emit('voteOneCounted',obj.vote)
     })
 })
 
