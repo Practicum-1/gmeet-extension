@@ -5,20 +5,26 @@ var io = require("socket.io")(http);
 app.use(express.static("client"));
 let vote = 0;
 let voterDetail = [];
-let users = {};
+let rooms = {};
 
 io.on("connection", function (socket) {
   console.log("Your id is " + socket.id);
   socket.on("joinRoom", function (roomName, user) {
     // console.log(roomName, user);
     socket.join(roomName);
-    if (!users[roomName]) {
-      users[roomName] = [{ user_id: socket.id, user_name: user }];
+    if (!rooms[roomName]) {
+      participants = [{ user_id: socket.id, displayName: user }];
+      rooms[roomName] = {
+        participants,
+      };
     } else {
-      users[roomName].push({ user_id: socket.id, user_name: user });
+      rooms[roomName]["participants"].push({
+        user_id: socket.id,
+        displayName: user,
+      });
     }
-    console.log(users);
-    io.to(roomName).emit("userInfo", users[roomName]);
+    console.log(JSON.stringify(rooms));
+    io.to(roomName).emit("roomInfo", rooms[roomName]);
   });
 
   socket.on("countOne", function (rName) {
