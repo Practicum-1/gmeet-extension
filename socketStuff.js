@@ -38,6 +38,10 @@ io.on("connection", function (socket) {
     console.log(` ${obj.room} has ${obj.vote} votes`);
     io.to(rName).emit("voteOneCounted", obj.vote);
   });
+
+  socket.on("disconnect", function () {
+    console.log("disconnected");
+  });
 });
 
 http.listen(3000, function () {
