@@ -39,6 +39,25 @@ io.on("connection", function (socket) {
     io.to(rName).emit("voteOneCounted", obj.vote);
   });
 
+  socket.on("insertPoll", function (roomName, poll) {
+    socket.join(roomName)
+    if (!rooms[roomName]['polls']) {
+      //  unable to figure out
+    }
+    else {
+      rooms[roomName]['polls'].push(poll)
+    }
+    io.to(roomName).emit("pollAdded",rooms.roomName.polls)
+  })
+
+  socket.on("insertVoterId", function(roomName, pollIndex, optionIndex){
+    socket.join(roomName);
+    rooms[roomName]['polls'][pollIndex]['total_votes'].push(socket.id);
+    rooms[roomName]['polls'][pollIndex]['options'][optionIndex]['votes'].push(socket.id);
+    io.to(roomName).emit("voterAdded",rooms)
+  
+  })
+
   socket.on("disconnect", function () {
     console.log("disconnected");
   });
