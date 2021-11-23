@@ -1,12 +1,20 @@
 const express = require("express");
 const app = express();
-var io = require("socket.io")(app);
+
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
 app.get("/", function (req, res) {
   res.send("Server running");
 });
+
+const port = process.env.PORT || 4000;
+
+const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
+
+var io = require("socket.io")(server);
 
 //CORS
 app.use((req, res, next) => {
@@ -73,9 +81,4 @@ io.on("connection", function (socket) {
     console.log("disconnected");
     console.log(socket.id, " disconnected");
   });
-});
-
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
 });
