@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" });
 
 app.get("/", function (req, res) {
   res.send("Server running");
@@ -73,7 +75,8 @@ io.on("connection", function (socket) {
     console.log(socket.id, " disconnected");
   });
 });
-
-http.listen("http://gmeet-extension.herokuapp.com", function () {
-  console.log("listening on localhost:3000");
+console.log(process.env.PORT);
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
 });
