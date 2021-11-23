@@ -31,8 +31,6 @@ app.use((req, res, next) => {
   next(); // dont forget this
 });
 
-let vote = 0;
-let voterDetail = [];
 let rooms = {};
 
 io.on("connection", function (socket) {
@@ -43,9 +41,11 @@ io.on("connection", function (socket) {
     if (!rooms[roomName]) {
       participants = [{ user_id: socket.id, displayName: user }];
       polls = [];
+      inactiveUsers = [];
       rooms[roomName] = {
         participants,
         polls,
+        inactiveUsers,
       };
     } else {
       rooms[roomName]["participants"].push({
@@ -80,5 +80,15 @@ io.on("connection", function (socket) {
   socket.on("disconnect", function () {
     console.log("disconnected");
     console.log(socket.id, " disconnected");
+    var roomsJoinedByASocketUser = Object.keys(
+      io.sockets.adapter.sids[socket.id]
+    ).slice(1);
+    // returns [socket.id, 'room-x'] or [socket.id, 'room-1', 'room-2', ..., 'room-x']
+    roomsJoinedByASocketUser.map((room) => {
+      rooms[room].participants.filter(
+        (participant) => participant.user_id !== socket.id
+      );
+      rooms[room].inactiveUsers.push(socket.id);
+    });
   });
 });
