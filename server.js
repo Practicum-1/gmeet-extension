@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
+var io = require("socket.io")(app);
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
@@ -75,7 +74,7 @@ io.on("connection", function (socket) {
     console.log(socket.id, " disconnected");
   });
 });
-console.log(process.env.PORT);
+
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
