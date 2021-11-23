@@ -74,6 +74,6 @@ io.on("connection", function (socket) {
   });
 });
 
-http.listen(3000, function () {
+http.listen("http://gmeet-extension.herokuapp.com", function () {
   console.log("listening on localhost:3000");
 });
