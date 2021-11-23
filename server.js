@@ -3,6 +3,22 @@ const app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 app.use(express.static("client"));
+
+//CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  next(); // dont forget this
+});
+
 let vote = 0;
 let voterDetail = [];
 let rooms = {};
