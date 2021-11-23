@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
-app.use(express.static("client"));
+
+app.get("/", function (req, res) {
+  res.send("Hello World!");
+});
 
 //CORS
 app.use((req, res, next) => {
