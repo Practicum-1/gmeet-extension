@@ -95,4 +95,4 @@ setInterval(() => {
       io.to(roomName).emit("roomInfo", rooms[roomName]);
     });
   }
-}, 5000);
+}, 30000);
