@@ -32,12 +32,13 @@ app.use((req, res, next) => {
 });
 
 let rooms = {};
+let users = {};
 
 io.on("connection", function (socket) {
   console.log("Your id is " + socket.id);
   socket.on("joinRoom", function (roomName, user) {
-    // console.log(roomName, user);
     socket.join(roomName);
+    users[socket.id] = { roomName, displayName: user };
     if (!rooms[roomName]) {
       participants = [{ user_id: socket.id, displayName: user }];
       polls = [];
@@ -77,18 +78,21 @@ io.on("connection", function (socket) {
     io.to(roomName).emit("voterAdded", rooms[roomName]["polls"]);
   });
 
-  socket.on("disconnect", function () {
-    console.log("disconnected");
+  socket.on("disconnecting", function () {
     console.log(socket.id, " disconnected");
-    var roomsJoinedByASocketUser = Object.keys(
-      io.sockets.adapter.sids[socket.id]
-    ).slice(1);
-    // returns [socket.id, 'room-x'] or [socket.id, 'room-1', 'room-2', ..., 'room-x']
-    roomsJoinedByASocketUser.map((room) => {
-      rooms[room].participants.filter(
-        (participant) => participant.user_id !== socket.id
-      );
-      rooms[room].inactiveUsers.push(socket.id);
-    });
+    if (users[socket.id]) {
+      const roomName = users[socket.id]["roomName"];
+      rooms[roomName].inactiveUsers.push(users[socket.id]["displayName"]);
+      console.log(rooms);
+    }
   });
 });
+
+setInterval(() => {
+  if (Object.keys(rooms).length > 0) {
+    Object.keys(rooms).forEach((roomName) => {
+      console.log("ran");
+      io.to(roomName).emit("roomInfo", rooms[roomName]);
+    });
+  }
+}, 5000);
